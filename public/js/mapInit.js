@@ -5,7 +5,6 @@ function initMap() {
         zoom: 8,
         center: {lat: 50, lng: 0}
     });
-
     fetchShipsAndDisplay();
 }
 
@@ -13,7 +12,7 @@ async function fetchShipsAndDisplay() {
     const response = await fetch('/ships');
     const ships = await response.json();
 
-    Object.entries(ships).forEach(([mmsi, ship]) => {
+    Object.entries(ships).forEach(ship => {
         const position = {lat: ship.Latitude, lng: ship.Longitude};
         const rotation = ship.TrueHeading;
         const icon = {
