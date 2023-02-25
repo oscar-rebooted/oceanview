@@ -5,7 +5,10 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from typing import Dict
 
 load_dotenv()
 api_key_aisstream = os.getenv('API_KEY')
@@ -22,6 +25,8 @@ class Ship(BaseModel):
     Latitude: float
     Longitude: float
     TrueHeading: int
+
+ships = {}
 
 async def connect_aisstream():
     max_messages = 2
@@ -53,10 +58,23 @@ async def connect_aisstream():
                                  Longitude=filtered_dict['Longitude'],
                                  TrueHeading=filtered_dict['TrueHeading'])
             
-            # Add ship_instance to a database
+            ships[ship_instance.MMSI] = ship_instance
 
             if message_count >= max_messages:
                 await websocket.close()
 
-if __name__ == '__main__':
-    asyncio.run(connect_aisstream())
+# Not possible to have same script managing websocket connection and API endpoints
+# Need to split the two and create a postgreSQL database
+                
+# if __name__ == '__main__':
+#     asyncio.run(connect_aisstream())
+
+@app.get("/ships", response_model=Dict[int, Ship])
+async def get_ships():
+    return ships
+
+app.mount('/static', StaticFiles(directory="public"), name="static")
+
+@app.get("/")
+async def index():
+    return FileResponse(os.path.join(os.getcwd(), 'index.html'))
