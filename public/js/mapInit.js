@@ -1,9 +1,11 @@
 let map;
 
-function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+async function initMap() {
+    const {Map} = await google.maps.importLibrary('maps');
+    
+    map = new Map(document.getElementById('map'), {
         zoom: 8,
-        center: {lat: 50, lng: 0}
+        center: {lat: 50, lng: 0},
     });
     fetchShipsAndDisplay();
 }
@@ -12,7 +14,7 @@ async function fetchShipsAndDisplay() {
     const response = await fetch('/ships');
     const ships = await response.json();
 
-    Object.entries(ships).forEach(ship => {
+    ships.forEach(ship => {
         const position = {lat: ship.Latitude, lng: ship.Longitude};
         const rotation = ship.TrueHeading;
         const icon = {
