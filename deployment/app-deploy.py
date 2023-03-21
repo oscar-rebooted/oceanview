@@ -7,6 +7,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from typing import List
 from mangum import Mangum
+from fastapi.middleware.cors import CORSMiddleware
 
 DB_HOST = 'oceanview.cx40qca66kt5.eu-west-2.rds.amazonaws.com'
 DB_PORT = '5432'
@@ -17,6 +18,18 @@ DB_PASSWORD = 'wzS1Fm79QaqJwban9Iir'
 S3_BUCKET_URL = 'https://oceanview-exb5svq2.s3.eu-west-2.amazonaws.com'
 
 app = FastAPI()
+
+origins = [
+    'https://oceanview-exb5svq2.s3.eu-west-2.amazonaws.com',
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 class Ship(BaseModel):
     MMSI: int
