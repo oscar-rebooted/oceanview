@@ -4,6 +4,7 @@ misc/
 __pycache__/
 test.py
 *.zip
+deployment/__pycache__/
 deployment/deploymentvenv/
 deployment/python/
-deployment/__pycache__/
+deployment/python old/
