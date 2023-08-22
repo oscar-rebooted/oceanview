@@ -9,6 +9,7 @@ https://github.com/aisstream
 **Purpose of this project**
 
 This is only the 2nd web "app" that I build so was mainly a tool/source of motivation for me to explore technologies I'm curious about 
+
 All around, am super happy I did it - great success!
 
 ![3d80a358135368fd36431d4e930b1c11](https://github.com/user-attachments/assets/9f8cb6b8-cf5f-41f2-985a-04745615aab4)
