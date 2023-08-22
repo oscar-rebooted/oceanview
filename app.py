@@ -3,7 +3,9 @@
 from dotenv import load_dotenv
 import os
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -25,13 +27,15 @@ origins = [
     S3_BUCKET_URL
 ]
 
+# When running locally, the frontend and backend are on different ports, so we need to allow cross-origin requests
+# This allows all methods & headers but only for these specific origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:8000", "http://127.0.0.1:8000"], # localhost is where the frontend is running in browser, and 127.0.0.1 is IP of the uvicorn server
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-) 
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Ship(BaseModel):
     MMSI: int
@@ -67,6 +71,11 @@ async def get_ships():
     ships = fetch_ship_location()
     return ships
 
+app.mount("/static", StaticFiles(directory="."), name="static")
+
 @app.get("/")
 def index():
-    return RedirectResponse(url=f'{S3_BUCKET_URL}/index.html')
+    with open("index.html", "r") as file:
+        content = file.read()
+        content = content.replace("GOOGLE_MAPS_API_KEY", os.getenv("GOOGLE_MAPS_API_KEY"))
+    return HTMLResponse(content=content)
