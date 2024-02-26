@@ -1,25 +1,34 @@
+let map;
+
 function initMap() {
-    // The location of Uluru
-    const uluru = {lat: -25.344, lng: 131.036};
-    const direction = 180;
-    // The map, centered at Uluru
-    const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 5,
-        center: uluru
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: {lat: 50, lng: 0}
     });
 
-    const marker = new google.maps.Marker({
-        position: uluru, // Your marker position
-        map: map, // Your map instance
-        icon: {
-            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, // Example using a predefined path
-            // For custom SVG path, replace the value of 'path' with your SVG path commands as a string.
+    fetchShipsAndDisplay();
+}
+
+async function fetchShipsAndDisplay() {
+    const response = await fetch('/ships');
+    const ships = await response.json();
+
+    Object.entries(ships).forEach(([mmsi, ship]) => {
+        const position = {lat: ship.Latitude, lng: ship.Longitude};
+        const rotation = ship.TrueHeading;
+        const icon = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
             scale: 5,
-            rotation: 256, // Rotate the symbol
+            rotation: rotation, // Rotate the symbol
             fillColor: '#90EE90',
             strokeColor: '#378E37',
             fillOpacity: 1,
             strokeWeight: 1,
-        }
+        };
+        new google.maps.Marker({
+            position: position, // Your marker position
+            map: map, // Your map instance
+            icon: icon
+        });
     });
 }
