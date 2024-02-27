@@ -33,7 +33,10 @@ async def fetch_ship_location():
     ship_records = await conn.fetch(
         "SELECT mmsi, latitude, longitude, trueheading FROM ship_location LIMIT 50"
     )
-    ships = [Ship(MMSI=row["mmsi"], Latitude=row["latitude"], Longitude=row["longitude"], TrueHeading=row["trueheading"]) for row in ship_records]
+    ships = [Ship(MMSI=row["mmsi"], 
+                Latitude=row["latitude"],
+                Longitude=row["longitude"], 
+                TrueHeading=row["trueheading"] or 0) for row in ship_records] #TrueHeading can never be negative
     await conn.close()
     return ships
 
