@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
 import asyncpg
-from collections import deque
 
 load_dotenv()
 api_key_aisstream = os.getenv('API_KEY_AISSTREAM')
@@ -68,11 +67,8 @@ async def insert_ship_data():
     conn = await get_db_connection()
 
     try:
-
         async with conn.transaction():
-            while True:
-                if processed_data_queue.empty() and connection_closed.is_set():
-                    break
+            while not processed_data_queue.empty() or not connection_closed.is_set():
                 try:
                     ship_instance = await asyncio.wait_for(processed_data_queue.get(), timeout=0.5)
                     
@@ -83,7 +79,7 @@ async def insert_ship_data():
                             longitude = EXCLUDED.longitude,
                             trueheading = EXCLUDED.trueheading;
                     ''', ship_instance.MMSI, ship_instance.Latitude, ship_instance.Longitude, ship_instance.TrueHeading)
-
+                    print("inserted")
                 except asyncio.TimeoutError:
                         if connection_closed.is_set():
                             break
@@ -95,7 +91,7 @@ async def insert_ship_data():
         await conn.close()
 
 async def connect_aisstream():
-    max_messages = 2
+    max_messages = 10
     message_count = 0
 
     async with websockets.connect('wss://stream.aisstream.io/v0/stream') as websocket:
