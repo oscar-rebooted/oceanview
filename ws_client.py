@@ -91,7 +91,7 @@ async def insert_ship_data():
         await conn.close()
 
 async def connect_aisstream():
-    max_messages = 500
+    max_messages = 10
     message_count = 0
 
     async with websockets.connect('wss://stream.aisstream.io/v0/stream') as websocket:

@@ -1,10 +1,7 @@
-*.env
-venv/
-misc/
 __pycache__/
-test.py
+archive/
+misc/
+python/
+venv/
+*.env
 *.zip
-deployment/__pycache__/
-deployment/deploymentvenv/
-deployment/python/
-deployment/python old/
