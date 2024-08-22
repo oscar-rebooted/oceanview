@@ -11,7 +11,7 @@ async function initMap() {
 }
 
 async function fetchShipsAndDisplay() {
-    const response = await fetch('http://localhost:8000/ships');
+    const response = await fetch('/ships');
     const ships = await response.json();
 
     ships.forEach(ship => {
