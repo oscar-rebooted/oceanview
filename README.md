@@ -6,39 +6,22 @@ A dashboard for visualising ships in real time, i.e., their current location and
 
 https://github.com/aisstream
 
-## Purpose of this project
-
-This is only the 2nd web "app" that I build so was mainly a tool/source of motivation for me to explore technologies I'm curious about 
-
-All around, am super happy I did it - great success!
-
-![3d80a358135368fd36431d4e930b1c11](https://github.com/user-attachments/assets/9f8cb6b8-cf5f-41f2-985a-04745615aab4)
-
-
-## What I learnt/gained exposure to through this project
-- Asynchronous functions for querying
-- Pooling database connections
+Mainly a tool/source of motivation for me to explore technologies I'm curious about, namely:
+- Websockets
+- Asynchronous logic
+- Managing database connections
 - Pydantic
-- Querying a 3rd party API and processing its data, specifically a Websocket
 - PostgreSQL/using pgadmin4
 - FastAPI
 - Docker & containerisation
 - AWS: Lambda, RDS, IAM (basic), Cloudwatch
-- Hosting on the cloud (looked into Heroku, Fly.io)
 
 ## What I would do if I had more time
 - Processing more messages from AISstreams e.g. ShipStaticData which includes ETA
 - Showing TrueHeading=Null on frontend, not just =0
-- Make the frontend using React
-- Make the ship icons clickable so that you can see info about them
 - Start storing location data of specific ships over time
 - Make ML model to using historical data to improve upon ETA forecasts
 - Authentication to access /ships api
-- Interface where you can select which ships you want to see, rather than just taking ships in an area
-- Implement Apache Kafka to learn more about streaming
-- Set up a CI/CD pipeline
-- Provision my infra with Terraform
 
 ## License
 This project is licensed under the MIT License. However, it includes dependencies that are licensed under the LGPL-3.0, such as `psycopg2`. 
-
